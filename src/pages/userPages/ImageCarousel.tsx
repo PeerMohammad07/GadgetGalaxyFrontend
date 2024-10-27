@@ -5,20 +5,20 @@ const ImageCarousel = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   
   const slides = [
-    {
-      title: "Innovative Tech Solutions",
-      description: "Discover the latest in technology",
-      image: "/api/placeholder/800/400",
-    },
+    // {
+    //   title: "Innovative Tech Solutions",
+    //   description: "Discover the latest in technology",
+    //   image: "/simple.jpg'",
+    // },
     {
       title: "Smart Devices",
       description: "Experience next-gen gadgets",
-      image: "/api/placeholder/800/400",
+      image: "/homeGadget.webp",
     },
     {
       title: "Future of Computing",
       description: "Tomorrow's technology today",
-      image: "/api/placeholder/800/400",
+      image: "/simple.jpg",
     }
   ];
 

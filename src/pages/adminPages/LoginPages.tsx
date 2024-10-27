@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FaEye } from "react-icons/fa";
-import { IoEyeOffSharp } from "react-icons/io5";
+import { IoEyeOffSharp, IoHome } from "react-icons/io5";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { userLogin } from "../../Redux/Slices/userSlice";
@@ -69,6 +69,7 @@ const AdminLogin = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="bg-white shadow-lg p-8 rounded-lg max-w-sm w-full">
+        <Link to={'/'}><IoHome/></Link>
         <h1 className="text-3xl font-bold text-center mb-6 text-gray-800">
           Admin Login
         </h1>

@@ -5,16 +5,19 @@ import {
   BookOpenIcon,
   HeartIcon,
 } from 'lucide-react';
-import { useState } from 'react';
-import { useSelector } from 'react-redux';
-import { RootState } from '../Redux/store';
 import { Link } from 'react-router-dom';
 import { FaUser } from 'react-icons/fa6';
 import { FaShoppingCart } from 'react-icons/fa';
+import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../Redux/store';
+import { logoutApi } from '../Api/userApi';
+import { userLogout } from '../Redux/Slices/userSlice';
 
-const Navbar = () => {
-  const userData = useSelector((state: RootState) => state.user.userData);
+const Navbar:React.FC<any> = ({count}) => {
+  const userData = useSelector((state:RootState)=> state.user.userData)
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const dispatch = useDispatch()
 
   return (
     <nav className="w-full bg-white shadow-md">
@@ -59,12 +62,15 @@ const Navbar = () => {
                     >
                       Orders
                     </Link>
-                    <Link
-                      to="/logout"
+                    <button
+                      onClick={async ()=>{
+                        await logoutApi()
+                        dispatch(userLogout())
+                      }}
                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                     >
                       Logout
-                    </Link>
+                    </button>
                   </div>
                 )}
               </div>
@@ -85,15 +91,16 @@ const Navbar = () => {
                 </Link>
               </div>
             )}
-            <button
+            <Link
+            to={'/cart'}
               className="p-2 hover:bg-orange-50 rounded-full transition-colors relative"
               aria-label="Shopping Cart"
             >
               <FaShoppingCart className="h-5 w-5 text-gray-600" />
               <span className="absolute -top-1 -right-1 bg-orange-500 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center">
-                0
+                {count ? count : "0"}
               </span>
-            </button>
+            </Link>
           </div>
         </div>
       </div>

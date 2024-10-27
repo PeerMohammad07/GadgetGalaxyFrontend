@@ -52,3 +52,11 @@ export const addCategory = async (data:any)=>{
     return Promise.reject()
   }
 }
+
+export const logoutApiAdmin = async ()=>{
+  try {
+    return await Api.post(adminEndpoints.logout)
+  } catch (error) {
+    return Promise.reject()
+  }
+}

@@ -1,7 +1,10 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
+import { RootState } from '../Redux/store';
+import toast from 'react-hot-toast';
 
 interface Product {
-  id: string;
+  _id: string;
   name: string;
   price: number;
   description: string;
@@ -10,11 +13,10 @@ interface Product {
 }
 
 const ProductCard: React.FC<Product & {
-  onAddToCart: (id: string) => void;
+  onAddToCart: (id: string,quantity:number,price:number) => void;
   onAddToWishlist: (id: string) => void;
-  onQuickView: (id: string) => void;
 }> = ({
-  id,
+  _id,
   name = '',
   price = 0,
   description = '',
@@ -22,10 +24,9 @@ const ProductCard: React.FC<Product & {
   quantity = 0,
   onAddToCart,
   onAddToWishlist,
-  onQuickView
 }) => {
-  // Ensure price is a number and format it safely
   const formattedPrice = typeof price === 'number' ? price.toFixed(2) : '0.00';
+  const userData = useSelector((prevState:RootState)=> prevState.user.userData)
 
   return (
     <div className="group relative w-full max-w-sm bg-white rounded-lg shadow-lg overflow-hidden transition-all duration-300 hover:shadow-xl">
@@ -38,7 +39,7 @@ const ProductCard: React.FC<Product & {
         
         <div className="absolute top-2 right-2 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
           <button 
-            onClick={() => onAddToWishlist(id)}
+            onClick={() => onAddToWishlist(_id)}
             className="p-2 bg-white rounded-full shadow-md hover:bg-gray-100 transition-colors duration-200"
             aria-label="Add to wishlist"
           >
@@ -66,15 +67,21 @@ const ProductCard: React.FC<Product & {
           <span className="text-xl font-bold text-gray-900">
           ₹{formattedPrice}
           </span>
-          {quantity > 0 && quantity < 5 && (
+          {/* {quantity > 0 && quantity < 5 && (
             <span className="text-sm text-orange-600">
               Only {quantity} left!
             </span>
-          )}
+          )} */}
         </div>
 
         <button
-          onClick={() => onAddToCart(id)}
+          onClick={() => {
+            if(!userData){
+              toast.error("please login to add to cart")
+            }else{
+              onAddToCart(_id,1,price)
+            }
+          }}
           disabled={quantity === 0}
           className="w-full py-2 px-4 bg-orange-600 text-white rounded-md font-medium flex items-center justify-center gap-2 
             hover:bg-orange-700 transition-colors duration-200 disabled:bg-gray-400 disabled:cursor-not-allowed"
