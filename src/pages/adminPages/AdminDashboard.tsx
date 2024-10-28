@@ -15,14 +15,14 @@ const AdminDashboard = () => {
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const adminData = useSelector((state:RootState)=> state.admin.adminData)
+  const adminData = useSelector((state: RootState) => state.admin.adminData)
   const navigate = useNavigate()
 
-  useEffect(()=>{
-    if(!adminData){
+  useEffect(() => {
+    if (!adminData) {
       navigate("/admin/login")
     }
-  },[adminData])
+  }, [adminData])
 
   useEffect(() => {
     const fetchData = async () => {
@@ -50,13 +50,40 @@ const AdminDashboard = () => {
     setPage(newPage);
   };
 
-  const addValueFromChild = (value:any,type:string)=>{
-    if(type=="product"){
-      setProducts((prevValue)=> [...prevValue,value])
-    }else if(type=="category"){
-      setCategories((prevValue)=> [...prevValue,value])
+  const addValueFromChild = (value: any, type: string) => {
+    if (type == "product") {
+      setProducts((prevValue) => [...prevValue, value])
+    } else if (type == "category") {
+      setCategories((prevValue) => [...prevValue, value])
     }
   }
+  const removeValueFromChild = (id: any, type: string) => {
+    if (type === "product") {
+      setProducts((prevProducts) =>
+        prevProducts.filter((product: any) => product._id !== id)
+      );
+    } else if (type === "category") {
+      setCategories((prevCategories) =>
+        prevCategories.filter((category: any) => category._id !== id)
+      );
+    }
+  };
+
+  const updateValueFromChild = (updatedItem: any, type: string) => {
+    if (type === "product") {
+      setProducts((prevProducts) =>
+        prevProducts.map((product: any) =>
+          product._id === updatedItem._id ? updatedItem : product
+        )
+      );
+    } else if (type === "category") {
+      setCategories((prevCategories) =>
+        prevCategories.map((category: any) =>
+          category._id === updatedItem._id ? updatedItem : category
+        )
+      );
+    }
+  };
 
   const returnData = (currentPage: 'user' | 'product' | 'category') => {
     switch (currentPage) {
@@ -80,7 +107,8 @@ const AdminDashboard = () => {
       <div className="flex">
         <Sidebar page={page} changePage={changePage} />
         <div className="flex-1 p-6">
-          <DataTable addValueFromChild={addValueFromChild} type={page} data={returnData(page)} />
+          <DataTable addValueFromChild={addValueFromChild} updateValueFromChild={updateValueFromChild}
+            removeValueFromChild={removeValueFromChild} type={page} data={returnData(page)} />
         </div>
       </div>
     </div>

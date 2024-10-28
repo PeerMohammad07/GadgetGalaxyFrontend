@@ -110,3 +110,11 @@ export const placeOrderApi = async (orderDetails:any) => {
     return Promise.reject()
   }
 };
+
+export const getAllOrders = async (userId:any)=>{
+  try {
+    return await Api.get(`${userEndPoints.orders}/${userId}`)
+  } catch (error) {
+    return Promise.reject()
+  }
+}

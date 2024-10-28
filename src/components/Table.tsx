@@ -1,15 +1,16 @@
 import React, { useState } from "react";
-import { Product } from "../Interfaces/IUserData";
 import ProductModal from "./AddEditProductModal";
-import { addCategory, addProduct } from "../Api/adminApi";
+import { addCategory, addProduct, deleteProduct, deleteCategory, editProduct, editCategory } from "../Api/adminApi";
 import CategoryModal from "./AddEdtiCategoryModal";
+import Swal from "sweetalert2";
+import { toast } from "react-toastify";
 
-const DataTable: React.FC<any> = ({ type, data, addValueFromChild }) => {
+const DataTable: React.FC<any> = ({ type, data, addValueFromChild, removeValueFromChild,updateValueFromChild }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [editingProduct, setEditingProduct] = useState<Product | null>(null);
-  const [editingCategory, setEditingCategory] = useState<{ name: string; description: string } | null>(null);
+  const [editingProduct, setEditingProduct] = useState<any | null>(null);
+  const [editingCategory, setEditingCategory] = useState<{_id?:string, name: string; description: string } | null>(null);
 
-  const columnConfigs:any = {
+  const columnConfigs: any = {
     user: [
       { key: 'slNo', label: 'Sl No' },
       { key: 'name', label: 'Name' },
@@ -21,13 +22,38 @@ const DataTable: React.FC<any> = ({ type, data, addValueFromChild }) => {
       { key: 'name', label: 'Name' },
       { key: 'category', label: 'Category' },
       { key: 'quantity', label: 'Stock' },
+      { key: 'actions', label: 'Actions' },
     ],
     category: [
       { key: 'slNo', label: 'Sl No' },
       { key: 'name', label: 'Name' },
       { key: 'description', label: 'Description' },
+      { key: 'actions', label: 'Actions' },
     ],
   };
+
+  const handleDelete = async (id: string) => {
+    try {
+      if (type === 'product') {
+        await deleteProduct(id);
+        removeValueFromChild(id, type)
+      } else if (type === 'category') {
+        await deleteCategory(id);
+        removeValueFromChild(id, type)
+      }
+    } catch (error) {
+      console.error('Error deleting item:', error);
+    }
+  };
+
+  // const handleEdit = (item: any) => {
+  //   if (type === 'product') {
+  //     setEditingProduct(item);
+  //   } else if (type === 'category') {
+  //     setEditingCategory(item);
+  //   }
+  //   setIsModalOpen(true);
+  // };
 
   const renderCell = (item: any, column: any, index: number) => {
     switch (column.key) {
@@ -41,9 +67,41 @@ const DataTable: React.FC<any> = ({ type, data, addValueFromChild }) => {
             {item.status}
           </span>
         );
-      case 'action':
+      case 'actions':
         return (
-          <button className="bg-red-600 text-white px-4 py-1 rounded hover:bg-red-700 text-sm">Block</button>
+          <div className="flex gap-2">
+            {/* <button
+              onClick={() => handleEdit(item)}
+              className="bg-orange-500 text-white px-3 py-1 rounded hover:bg-orange-600 text-sm transition"
+            >
+              Edit
+            </button> */}
+            <button
+              onClick={() => {
+                Swal.fire({
+                  title: 'Are you sure?',
+                  text: 'You won\'t be able to revert this!',
+                  icon: 'warning',
+                  showCancelButton: true,
+                  confirmButtonColor: '#3085d6',
+                  cancelButtonColor: '#d33',
+                  confirmButtonText: 'Yes, delete it!'
+                }).then((result) => {
+                  if (result.isConfirmed) {
+                    handleDelete(item._id);
+                    Swal.fire(
+                      'Deleted!',
+                      'Your item has been deleted.',
+                      'success'
+                    );
+                  }
+                });
+              }}
+              className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 text-sm transition"
+            >
+              Delete
+            </button>
+          </div>
         );
       default:
         return item[column.key];
@@ -52,19 +110,30 @@ const DataTable: React.FC<any> = ({ type, data, addValueFromChild }) => {
 
   const columns = columnConfigs[type] || [];
 
-  const handleSubmit = async (data: any, image?: any) => {
+  const handleSubmit = async (formData: any, image?: any) => {
     try {
       if (type === 'product' && editingProduct) {
-        // Handle product edit
+        const response = await editProduct(formData, editingProduct._id);
+        if(response.data){
+          updateValueFromChild(response.data, "product");
+          toast.success("Product updated successfully")
+        }
       } else if (type === 'category' && editingCategory) {
-        // Handle category edit
+        const response = await editCategory(formData, editingCategory._id);
+        if(response.data){
+          updateValueFromChild(response.data, "category");
+          toast.success("Category updated successfully")
+        }
       } else if (type === 'product') {
-        const response = await addProduct(data, image);
+        const response = await addProduct(formData, image);
         addValueFromChild(response.data, "product")
-      } else if (type == "category") {
-        const response = await addCategory(data)
+      } else if (type === "category") {
+        const response = await addCategory(formData)
         addValueFromChild(response.data, "category")
       }
+      setIsModalOpen(false);
+      setEditingProduct(null);
+      setEditingCategory(null);
     } catch (error) {
       console.error('Error submitting:', error);
     }

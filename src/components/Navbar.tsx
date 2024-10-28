@@ -14,7 +14,7 @@ import { RootState } from '../Redux/store';
 import { logoutApi } from '../Api/userApi';
 import { userLogout } from '../Redux/Slices/userSlice';
 
-const Navbar:React.FC<any> = ({count}) => {
+const Navbar:React.FC<any> = () => {
   const userData = useSelector((state:RootState)=> state.user.userData)
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dispatch = useDispatch()
@@ -97,9 +97,7 @@ const Navbar:React.FC<any> = ({count}) => {
               aria-label="Shopping Cart"
             >
               <FaShoppingCart className="h-5 w-5 text-gray-600" />
-              <span className="absolute -top-1 -right-1 bg-orange-500 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center">
-                {count ? count : "0"}
-              </span>
+
             </Link>
           </div>
         </div>

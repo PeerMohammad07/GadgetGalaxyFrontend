@@ -3,8 +3,6 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { getAllCategorys } from '../Api/adminApi';
 
-
-// Modified schema to handle string inputs from form
 const productSchema = z.object({
   name: z.string()
     .min(3, "Product name must be at least 3 characters")
@@ -35,7 +33,7 @@ type ProductFormData = z.infer<typeof productSchema>;
 interface ProductModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSubmit: (data: ProductFormData, imageFile?: File) => void;
+  onSubmit: (data: ProductFormData, imageFile?: any) => void;
   initialData?: any;
   mode: 'add' | 'edit';
 }
@@ -49,15 +47,8 @@ const ProductModal: React.FC<ProductModalProps> = ({
 }) => {
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imageError, setImageError] = useState<string | null>(null);
-  const [categories,setCategories] = useState([]);
-
-  useEffect(()=>{
-    const fetch = async ()=>{
-      const response = await getAllCategorys()
-      setCategories(response.data)
-    }
-    fetch()
-  },[])
+  const [categories, setCategories] = useState([]);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
 
   const form = useForm<ProductFormData>({
     defaultValues: {
@@ -70,6 +61,27 @@ const ProductModal: React.FC<ProductModalProps> = ({
   });
 
   const { register, handleSubmit, formState: { errors }, reset } = form;
+
+  useEffect(() => {
+    if (initialData && mode === 'edit') {
+      reset({
+        name: initialData.name || '',
+        price: initialData.price?.toString() || '0',
+        quantity: initialData.quantity?.toString() || '0',
+        description: initialData.description || '',
+        category: initialData.category || '',
+      });
+      setImagePreview(initialData.imageUrl); 
+    }
+  }, [initialData, mode, reset]);
+
+  useEffect(() => {
+    const fetch = async () => {
+      const response = await getAllCategorys();
+      setCategories(response.data);
+    };
+    fetch();
+  }, []);
 
   const onSubmitHandler = (data: ProductFormData) => {
     setImageError(null);
@@ -93,16 +105,21 @@ const ProductModal: React.FC<ProductModalProps> = ({
       quantity: Number(data.quantity)
     };
 
-    if (!imageFile) {
-      setImageError("Please upload an image file");
-      return;
-    }
-
     onSubmit(transformedData, imageFile);
     reset();
     setImageFile(null);
     setImageError(null);
+    setImagePreview(null);
     onClose();
+  };
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setImageFile(file);
+      setImageError(null);
+      setImagePreview(URL.createObjectURL(file)); 
+    }
   };
 
   if (!isOpen) return null;
@@ -122,7 +139,6 @@ const ProductModal: React.FC<ProductModalProps> = ({
         </div>
 
         <form onSubmit={handleSubmit(onSubmitHandler)} className="p-4">
-          {/* Existing Input Fields */}
           <div className="mb-4">
             <label className="block text-sm font-medium text-gray-700 mb-1">Product Name</label>
             <input type="text" {...register('name')} className="mt-1 block w-full border border-gray-300 rounded-md p-2" />
@@ -133,14 +149,13 @@ const ProductModal: React.FC<ProductModalProps> = ({
             <label className="block text-sm font-medium text-gray-700 mb-1">Category</label>
             <select {...register('category')} className="mt-1 block w-full border border-gray-300 rounded-md p-2">
               <option value="">Select a category</option>
-              {categories.map((category:any) => (
+              {categories.map((category: any) => (
                 <option key={category._id} value={category._id}>{category.name}</option>
               ))}
             </select>
             {errors.category && <p className="text-red-500 text-sm">{errors.category.message}</p>}
           </div>
 
-          {/* Additional Fields (Price, Quantity, Description, Image) */}
           <div className="mb-4">
             <label className="block text-sm font-medium text-gray-700 mb-1">Price</label>
             <input type="number" {...register('price')} className="mt-1 block w-full border border-gray-300 rounded-md p-2" />
@@ -161,18 +176,17 @@ const ProductModal: React.FC<ProductModalProps> = ({
 
           <div className="mb-4">
             <label className="block text-sm font-medium text-gray-700 mb-1">Product Image</label>
-            <input type="file" accept="image/*" onChange={(e) => {
-              const file = e.target.files?.[0];
-              if (file) setImageFile(file);
-              setImageError(null);
-            }} className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-orange-50 file:text-orange-600 hover:file:bg-orange-100" />
+            {imagePreview && <img src={imagePreview} alt="Image Preview" className="mb-2 w-full h-auto rounded-md" />}
+            <input type="file" accept="image/*" onChange={handleImageChange} className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-orange-50 file:text-orange-600 hover:file:bg-orange-100" />
             {imageError && <p className="text-red-500 text-sm">{imageError}</p>}
           </div>
 
           {/* Submit and Cancel Buttons */}
           <div className="flex justify-end gap-2 mt-6">
             <button type="button" onClick={onClose} className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">Cancel</button>
-            <button type="submit" className="px-4 py-2 text-sm font-medium text-white bg-orange-600 rounded-md hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500">{mode === 'add' ? 'Add Product' : 'Save Changes'}</button>
+            <button type="submit" className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+              {mode === 'add' ? 'Add Product' : 'Update Product'}
+            </button>
           </div>
         </form>
       </div>

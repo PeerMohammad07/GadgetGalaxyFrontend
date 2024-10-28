@@ -6,6 +6,8 @@ import ShoppingCart from "../components/CartPage";
 import CheckoutPage from "../pages/userPages/CheckoutPage";
 import ProtectUserRoutes from "../pages/Protect/UserProtect";
 import Shop from "../pages/userPages/ShopPage";
+import Common from "../components/Common";
+import OrdersList from "../pages/userPages/OrdersPage";
 
 
 const UserRoutes = () => {
@@ -27,7 +29,9 @@ const UserRoutes = () => {
         <Route
           path="/"
           element={
-            <Home />
+            <Common>
+              <Home />
+            </Common>
           }
         />
         <Route
@@ -42,14 +46,26 @@ const UserRoutes = () => {
           path="/checkout"
           element={
             <ProtectUserRoutes>
-              <CheckoutPage />
+              <Common>
+                <CheckoutPage />
+              </Common>
             </ProtectUserRoutes>
           }
         />
         <Route
           path="/shop"
           element={
+            <Common>
               <Shop />
+            </Common>
+          }
+        />
+        <Route
+          path="/orders"
+          element={
+            <Common>
+              <OrdersList />
+            </Common>
           }
         />
       </Routes>

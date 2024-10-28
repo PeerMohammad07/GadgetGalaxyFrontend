@@ -5,7 +5,6 @@ import { FaEye } from "react-icons/fa";
 import { IoEyeOffSharp, IoHome } from "react-icons/io5";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { userLogin } from "../../Redux/Slices/userSlice";
 import { useDispatch } from "react-redux";
 import { adminLoginApi } from "../../Api/adminApi";
 import { adminLogin } from "../../Redux/Slices/adminSlice";

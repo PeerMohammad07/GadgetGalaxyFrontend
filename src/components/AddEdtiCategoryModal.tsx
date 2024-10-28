@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
@@ -21,6 +21,15 @@ const CategoryModal: React.FC<CategoryModalProps> = ({ isOpen, onClose, onSubmit
   const { register, handleSubmit, formState: { errors }, reset } = useForm<CategoryFormData>({
     defaultValues: initialData || { name: '', description: '' },
   });
+
+  useEffect(() => {
+    if (initialData && mode === 'edit') {
+      reset({
+        name: initialData.name || '',
+        description: initialData.description || '',
+      });
+    }
+  }, [initialData, mode, reset]);
 
   const onSubmitHandler = (data: CategoryFormData) => {
     onSubmit(data);

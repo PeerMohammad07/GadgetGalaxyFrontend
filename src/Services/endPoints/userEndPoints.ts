@@ -7,5 +7,6 @@ export const userEndPoints = {
   removeItemFromCart : "/api/user/removeFromCart",
   wishlist: "/api/user/wishlist",
   addAddress : "/api/user/address",
-  placeOrder : "/api/user/placeOrder"
+  placeOrder : "/api/user/placeOrder",
+  orders : "/api/user/orders"
 }

@@ -45,9 +45,41 @@ export const addProduct = async (data:any,image:any)=>{
   }
 }
 
+export const editProduct = async (data:any,id:any)=>{
+  try {
+    return await Api.patch(`${adminEndpoints.products}/${id}`,{data})
+  } catch (error) {
+    return Promise.reject()
+  }
+}
+
+export const editCategory = async (data:any,id:any)=>{
+  try {
+    return await Api.patch(`${adminEndpoints.category}/${id}`,{data})
+  } catch (error) {
+    return Promise.reject()
+  }
+}
+
+export const deleteProduct = async (userId : string)=>{
+  try {
+    return await Api.delete(`${adminEndpoints.products}/${userId}`)
+  } catch (error) {
+    return Promise.reject()
+  }
+}
+
 export const addCategory = async (data:any)=>{
   try {
     return await Api.post(adminEndpoints.category,{data})
+  } catch (error) {
+    return Promise.reject()
+  }
+}
+
+export const deleteCategory = async (userId:string)=>{
+  try {
+    return await Api.delete(`${adminEndpoints.category}/${userId}`)
   } catch (error) {
     return Promise.reject()
   }
