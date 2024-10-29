@@ -29,7 +29,7 @@ const Navbar:React.FC<any> = () => {
 
           <div className="hidden md:flex items-center space-x-8">
             <NavLink href="/" icon={<HomeIcon size={18} />} text="Home" active />
-            <NavLink href="/shop" icon={<ShoppingBagIcon size={18} />} text="Shop" />
+            <NavLink href="/shopping" icon={<ShoppingBagIcon size={18} />} text="Shop" />
             <NavLink href="/about" icon={<InfoIcon size={18} />} text="About us" />
             <NavLink href="/blog" icon={<BookOpenIcon size={18} />} text="Blog" />
             <NavLink href="/wishlist" icon={<HeartIcon size={18} />} text="Wishlist" />
@@ -108,8 +108,8 @@ const Navbar:React.FC<any> = () => {
 
 const NavLink: React.FC<any> = ({ href, icon, text, active = false }) => {
   return (
-    <a
-      href={href}
+    <Link
+      to={href}
       className={`flex items-center space-x-1 px-3 py-2 rounded-md text-sm font-medium transition-colors
         ${active
           ? 'text-orange-500 hover:text-orange-600'
@@ -118,7 +118,7 @@ const NavLink: React.FC<any> = ({ href, icon, text, active = false }) => {
     >
       {icon}
       <span>{text}</span>
-    </a>
+    </Link>
   );
 };
 

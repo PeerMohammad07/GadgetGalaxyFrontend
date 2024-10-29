@@ -5,10 +5,10 @@ import Home from "../pages/userPages/Home";
 import ShoppingCart from "../components/CartPage";
 import CheckoutPage from "../pages/userPages/CheckoutPage";
 import ProtectUserRoutes from "../pages/Protect/UserProtect";
-import Shop from "../pages/userPages/ShopPage";
 import Common from "../components/Common";
 import OrdersList from "../pages/userPages/OrdersPage";
 import Wishlist from "../pages/userPages/Whishlist";
+import Shop from "../pages/userPages/ShopPage";
 
 
 const UserRoutes = () => {
@@ -54,10 +54,10 @@ const UserRoutes = () => {
           }
         />
         <Route
-          path="/shop"
+          path="/shopping"
           element={
             <Common>
-              <Shop />
+              <Shop/>
             </Common>
           }
         />
