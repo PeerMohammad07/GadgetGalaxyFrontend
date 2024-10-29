@@ -25,13 +25,13 @@ const Wishlist = () => {
     <div className="max-w-7xl mx-auto p-4">
       <h1 className="text-2xl font-bold mb-6 text-gray-800">My Wishlist</h1>
       
-      {whishlistProduct.length === 0 ? (
+      {Array.isArray(whishlistProduct)&&whishlistProduct.length === 0 ? (
         <div className="text-center py-8">
           <p className="text-gray-500">Your wishlist is empty</p>
         </div>
       ) : (
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {whishlistProduct.map((item: any) => (
+          {whishlistProduct && whishlistProduct.map((item: any) => (
             <div 
               key={item._id} 
               className="bg-white rounded-lg shadow-md overflow-hidden border border-gray-100 hover:shadow-lg transition-shadow duration-300"

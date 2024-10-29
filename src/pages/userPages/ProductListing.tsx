@@ -29,10 +29,14 @@ const ProductListing: React.FC<any> = ({ products }) => {
 
   const handleAddToCart = async (productId: string, productQuantity: number, productPrice: number) => {
     try {
+    if(userData){
       const response = await addToCart(userData?._id, productId, productQuantity, productPrice);
       if (response.data) {
         toast.success("Added to cart successfully");
       }
+    }else{
+      toast.error("please login to add to cart")
+    }
     } catch (error: any) {
       if (error.response && error.response.status === 409) {
         toast.error("Product already exists");
@@ -45,11 +49,16 @@ const ProductListing: React.FC<any> = ({ products }) => {
 
   const handleAddToWishlist = async (id: string) => {
     try {
+     if(userData){
       const response = await addToWishlist(userData?._id, id);
       if (response.data) {
         setWhislistProduct(response.data.products);
         toast.success("Added to wishlist successfully!");
       }
+     }else{
+      toast.error("please login to add to whislist")
+
+     }
     } catch (error: any) {
       if (error.status == 409) {
         toast.error("Product already exists in the cart")
@@ -61,12 +70,16 @@ const ProductListing: React.FC<any> = ({ products }) => {
 
   const handleRemoveFromWishlist = async (id: string) => {
     try {
-      const response = await removeItemFromWishlist(userData?._id, id);
+      if(userData){
+        const response = await removeItemFromWishlist(userData?._id, id);
       if (response.data) {
         setWhislistProduct((prevWishlist: any) =>
           prevWishlist.filter((product: any) => product.productId._id !== id)
         );
         toast.success("Removed from wishlist successfully!");
+      }
+      }else{
+        toast.error("please login ")
       }
     } catch (error: any) {
       toast.error("Something went wrong. Please try again.");
