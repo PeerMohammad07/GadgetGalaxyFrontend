@@ -91,10 +91,10 @@ const ProductModal: React.FC<ProductModalProps> = ({
       return;
     }
 
-    if (imageFile) {
-      const validImageTypes = ['image/jpeg', 'image/png', 'image/gif'];
+    if (imageFile) {      
+      const validImageTypes = ['image/jpeg', 'image/png', 'image/webp'];
       if (!validImageTypes.includes(imageFile.type)) {
-        setImageError("Please upload a valid image (JPEG, PNG, or GIF)");
+        setImageError("Please upload a valid image (JPEG, PNG, or webp)");
         return;
       }
     }
