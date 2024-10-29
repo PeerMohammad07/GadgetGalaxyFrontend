@@ -8,6 +8,7 @@ import ProtectUserRoutes from "../pages/Protect/UserProtect";
 import Shop from "../pages/userPages/ShopPage";
 import Common from "../components/Common";
 import OrdersList from "../pages/userPages/OrdersPage";
+import Wishlist from "../pages/userPages/Whishlist";
 
 
 const UserRoutes = () => {
@@ -65,6 +66,14 @@ const UserRoutes = () => {
           element={
             <Common>
               <OrdersList />
+            </Common>
+          }
+        />
+        <Route
+          path="/wishlist"
+          element={
+            <Common>
+              <Wishlist />
             </Common>
           }
         />
