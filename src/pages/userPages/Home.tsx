@@ -9,6 +9,7 @@ const Home = () => {
   useEffect(() => {
     const fetch = async () => {
       const response = await getAllProducts()
+      console.log(response.data,"products")
       setProducts(response.data)
     }
     fetch()

@@ -22,7 +22,7 @@ const Footer = () => {
             </div>
           </div>
 
-=          <div className="space-y-4">
+          <div className="space-y-4">
             <h3 className="text-lg font-semibold text-gray-800">Company</h3>
             <FooterLinks
               links={[

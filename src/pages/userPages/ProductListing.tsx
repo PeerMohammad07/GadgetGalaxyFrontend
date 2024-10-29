@@ -10,22 +10,14 @@ const ProductListing: React.FC<any> = ({ products }) => {
   const userData = useSelector((state: RootState) => state.user.userData)
   const [whishlistProduct, setWhislistProduct] = useState<any>([])
 
-  useEffect(() => {
-    if (userData?._id) {
-      const fetch = async () => {
-        const response = await getAllWishlistItems(userData._id);
-        setWhislistProduct(response.data.products);
-      };
-      fetch();
-    }
-  }, [userData]);
-
 
   useEffect(() => {
     const fetch = async () => {
-      const response = await getAllWishlistItems(userData?._id);
-      if (response.data && response.data.products) {
-        setWhislistProduct(response.data.products);
+      if(userData){
+        const response = await getAllWishlistItems(userData?._id);
+        if (response.data && response.data.products) {
+          setWhislistProduct(response.data.products);
+        }
       }
     };
     fetch();

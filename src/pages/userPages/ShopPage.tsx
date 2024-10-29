@@ -50,16 +50,18 @@ const Shop = () => {
   }, []);
 
   useEffect(() => {
-    const fetchCartItems = async () => {
-      try {
-        if (!userData?._id) return;
-        const response = await getAllCartItems(userData._id);
-        setCartItems(response.data.products);
-      } catch (error) {
-        console.error("Error fetching cart items:", error);
-      }
-    };
-    fetchCartItems();
+    if(userData){
+      const fetchCartItems = async () => {
+        try {
+          if (!userData?._id) return;
+          const response = await getAllCartItems(userData._id);
+          setCartItems(response.data.products);
+        } catch (error) {
+          console.error("Error fetching cart items:", error);
+        }
+      };
+      fetchCartItems();
+    }
   }, [userData?._id]);
 
   useEffect(() => {
@@ -157,55 +159,6 @@ const Shop = () => {
             <>
 
               <ProductListing products={filteredProducts}  />
-              {/* <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {filteredProducts.map((product) => (
-                  <div 
-                    key={product._id} 
-                    className="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
-                    onMouseEnter={() => setHoveredProduct(product._id)}
-                    onMouseLeave={() => setHoveredProduct(null)}
-                  >
-                    <div className="relative overflow-hidden group" style={{ height: '260px' }}>
-                      <img
-                        src={product.image}
-                        alt={product.name}
-                        className={`w-full h-full object-cover transition-transform duration-700 ${
-                          hoveredProduct === product._id ? 'scale-110' : 'scale-100'
-                        }`}
-                        onError={(e: React.SyntheticEvent<HTMLImageElement>) => {
-                          const target = e.target as HTMLImageElement;
-                          target.src = "/api/placeholder/400/300";
-                        }}
-                      />
-                      <div className="absolute inset-0 bg-black bg-opacity-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                    </div>
-                    <div className="p-6">
-                      <div className="flex justify-between items-start mb-2">
-                        <h3 className="text-xl font-semibold text-gray-900 line-clamp-1">
-                          {product.name}
-                        </h3>
-                        <span className="text-orange-500 font-bold">
-                          ₹{Number(product.price).toLocaleString()}
-                        </span>
-                      </div>
-                      <p className="text-gray-600 text-sm line-clamp-2 mb-4">
-                        {product.description}
-                      </p>
-                      <div className="flex justify-between items-center">
-                        <span className="text-sm text-gray-500">
-                          Stock: {product.quantity}
-                        </span>
-                        <button 
-                          className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-2 rounded-lg transition-colors duration-300 transform hover:scale-105"
-                        >
-                          Add to Cart
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div> */}
-
               {filteredProducts.length === 0 && (
                 <div className="text-center py-16 bg-white rounded-lg shadow-md">
                   <svg
