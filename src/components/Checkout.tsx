@@ -165,7 +165,7 @@ const Checkout = () => {
                     />
                     <label htmlFor="payment-cash">Cash on Delivery</label>
                   </div>
-                  <div className="flex items-center gap-2">
+                  {/* <div className="flex items-center gap-2">
                     <input
                       type="radio"
                       id="payment-razorpay"
@@ -175,7 +175,7 @@ const Checkout = () => {
                       onChange={(e) => setPaymentMethod(e.target.value)}
                     />
                     <label htmlFor="payment-razorpay">Online Payment</label>
-                  </div>
+                  </div> */}
                 </div>
               </div>
 
