@@ -15,11 +15,13 @@ const Checkout = () => {
   const navigate = useNavigate()
 
   useEffect(() => {
-    const fetch = async () => {
-      const response = await getAllCartItems(userData?._id);
-      setCartItems(response.data.products);
-    };
-    fetch();
+    if(userData){
+      const fetch = async () => {
+        const response = await getAllCartItems(userData?._id);
+        setCartItems(response.data.products);
+      };
+      fetch();
+    }
   }, [userData]);
 
   // Function to calculate total amount
@@ -34,6 +36,11 @@ const Checkout = () => {
     }
     if (!paymentMethod) {
       toast.error('Please select a payment method.');
+      return;
+    }
+
+    if(cartItems.length < 1){
+      toast.error('Please select some products.');
       return;
     }
 
@@ -93,7 +100,7 @@ const Checkout = () => {
           <div className="bg-white rounded-lg p-6 shadow-md">
             <h2 className="text-xl font-bold mb-4">Select Your Address</h2>
             <div className="space-y-4">
-              {userData && userData.addresses.map((address) => (
+              {userData && userData.addresses && userData.addresses.map((address) => (
                 <div key={address._id} className="border p-4 rounded-lg">
                   <div className="flex items-start gap-2">
                     <input
@@ -133,7 +140,7 @@ const Checkout = () => {
           <div className="bg-white rounded-lg p-6 shadow-md">
             <h2 className="text-xl font-bold mb-4">Your Order</h2>
             <div className="space-y-4">
-              {cartItems.map((item, index) => (
+              {cartItems && cartItems.map((item, index) => (
                 <div key={index} className="flex justify-between">
                   <span>{item.productId.name}</span>
                   <span>₹{item.totalPrice}</span>

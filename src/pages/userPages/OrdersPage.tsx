@@ -35,7 +35,7 @@ const OrdersList = () => {
 
         {/* Orders List */}
         <div className="p-6 space-y-4">
-          {orders.map((order:any) => (
+          {orders && orders.map((order:any) => (
             <div 
               key={order._id} 
               className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow"
@@ -74,7 +74,7 @@ const OrdersList = () => {
               </div>
 
               <div className="mt-4 space-y-2">
-                {order.products.map((product:any, idx:number) => (
+                {order.products && order.products.map((product:any, idx:number) => (
                   <div key={idx} className="flex justify-between items-center py-2">
                     <div className="flex items-center gap-2">
                       <div className="w-2 h-2 bg-orange-500 rounded-full"></div>
