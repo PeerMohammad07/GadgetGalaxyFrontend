@@ -37,7 +37,7 @@ const Wishlist = () => {
             >
               <div className="aspect-square relative">
                 <img 
-                  src={item.productId.images && item.productIdimages[0]}
+                  src={item.productId.image && item.productId.image}
                   alt={item.productId.name || 'Product'}
                   className="w-full h-full object-cover"
                 />
