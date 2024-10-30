@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { Trash2 } from 'lucide-react';
 import { RootState } from '../../Redux/store';
 import { getAllWishlistItems } from '../../Api/userApi';
 
@@ -48,11 +47,7 @@ const Wishlist = () => {
                     <h3 className="font-semibold text-lg text-gray-800">{item.productId.name}</h3>
                     <p className="text-sm text-gray-500 mb-1">{item.productId.category}</p>
                   </div>
-                  <button
-                    className="text-gray-400 hover:text-red-500 transition-colors duration-200"
-                  >
-                    <Trash2 className="h-5 w-5" />
-                  </button>
+                  
                 </div>
                 <p className="text-sm text-gray-600 mb-3 line-clamp-2">{item.productId.description}</p>
               </div>
